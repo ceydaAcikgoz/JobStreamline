@@ -1,0 +1,27 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/dotnet-postgres
+{
+  "name": "JobStreamline Api",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.vscode-dotnet-runtime",
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit",
+        "dbaeumer.vscode-eslint",
+        "ms-dotnettools.vscodeintellicode-csharp",
+        "aliasadidev.nugetpackagemanagergui"
+      ]
+    }
+  },
+  "forwardPorts": [
+    5143,
+    5434
+  ],
+  "remoteUser": "vscode"
+}
+
+

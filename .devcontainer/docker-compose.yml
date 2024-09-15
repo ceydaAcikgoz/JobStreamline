@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: job_streamline_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - jobsnetworks
+  
+  jobstreamlinedb:
+    container_name: job_streamline_db
+    image: postgres:16-alpine
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "5432:5432"
+    environment:
+      - TZ=Europe/Istanbul
+      - POSTGRES_USER=jobs
+      - POSTGRES_DB=jobs
+      - POSTGRES_PASSWORD=jobs 
+      - ALLOW_IP_RANGE=0.0.0.0/0
+      - FORCE_SSL=TRUE
+    restart: on-failure
+    healthcheck:
+      test: "PGPASSWORD=jobs pg_isready -h 127.0.0.1 -U jobs -d jobs"
+    networks:
+      - jobsnetworks
+  
+  redis:
+    image: redis:latest
+    container_name: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - jobsnetworks
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./init:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis-init:
+      image: redis:latest
+      container_name: redis_initializer
+      depends_on:
+        redis:
+          condition: service_healthy
+      entrypoint: ["/bin/sh", "-c"]
+      networks:
+        - jobsnetworks
+      command: |
+        "echo 'Setting up default blacklist words'; 
+        redis-cli -h redis SET blacklist:young 'young'; 
+        redis-cli -h redis SET blacklist:recent_graduate 'recent graduate'; 
+        redis-cli -h redis SET blacklist:male 'male'; 
+        redis-cli -h redis SET blacklist:female 'female';
+        redis-cli -h redis SET blacklist:foreigner 'foreigner';
+        redis-cli -h redis SET blacklist:energetic 'energetic';
+        redis-cli -h redis SET blacklist:native_speaker_only 'native speaker only';
+        redis-cli -h redis SET blacklist:perfect_fit 'perfect fit';
+        redis-cli -h redis SET blacklist:youthful 'youthful';
+        redis-cli -h redis SET blacklist:christian 'Christian';
+        redis-cli -h redis SET blacklist:muslim 'Muslim';
+        redis-cli -h redis SET blacklist:attractive 'attractive';
+        redis-cli -h redis SET blacklist:single 'single';
+        redis-cli -h redis SET blacklist:married 'married';
+        redis-cli -h redis SET blacklist:healthy 'healthy';
+        redis-cli -h redis SET blacklist:manpower 'manpower';
+        redis-cli -h redis SET blacklist:clean_cut 'clean-cut';
+        redis-cli -h redis SET blacklist:strong 'strong';
+        redis-cli -h redis SET blacklist:must 'must';
+        redis-cli -h redis SET blacklist:dynamic 'dynamic';
+        redis-cli -h redis SET blacklist:problem_free 'problem-free';
+        redis-cli -h redis SET blacklist:no_children 'no children'"
+      
+volumes:
+  postgres-data:
+    
+networks:
+    jobsnetworks:
+        driver: bridge

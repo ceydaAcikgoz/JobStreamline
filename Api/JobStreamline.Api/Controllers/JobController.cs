@@ -23,17 +23,23 @@ namespace JobStreamline.Api.Controllers
             return _iJobService.Get(id);
         }
 
-        [HttpPost]
-        public IActionResult Create([FromBody] InputJobDTO Job)
+        [HttpGet("/search")]
+        public async Task<List<JobElasticDTO>> SearchJobs([FromQuery] string text)
         {
-            OutputJobDto outputJobDto = _iJobService.Create(Job);
+            return await _iJobService.SearchJobs(text);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] InputJobDTO Job)
+        {
+            OutputJobDto outputJobDto = await _iJobService.Create(Job);
             return Ok(outputJobDto);
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] InputJobDTO Job)
+        public async Task<IActionResult> Update([FromBody] InputJobDTO Job)
         {
-            OutputJobDto outputJobDto = _iJobService.Update(Job);
+            OutputJobDto outputJobDto = await _iJobService.Update(Job);
             return Ok(outputJobDto);
         }
 

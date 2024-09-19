@@ -69,6 +69,7 @@ namespace JobStreamline.Api.Migrations
                 name: "IX_Jobs_CompanyId",
                 table: "Jobs",
                 column: "CompanyId");
+
         }
 
         /// <inheritdoc />

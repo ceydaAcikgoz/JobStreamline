@@ -40,6 +40,7 @@ public static class Jobs
                     x.Company.JobPostingLimit++;
                 });
                 jobService.Update(expiredJobs);
+                jobService.BulkDeleteDocumentsAsync(expiredJobs.Select(s=>s.Id.ToString()).ToList());//ilgili kayıtları elastic'den siler.
             }
         }
     }

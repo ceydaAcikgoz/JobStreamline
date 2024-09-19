@@ -13,7 +13,7 @@ services:
       - "host.docker.internal:host-gateway"
     networks:
       - jobsnetworks
-  
+
   jobstreamlinedb:
     container_name: job_streamline_db
     image: postgres:16-alpine
@@ -55,42 +55,91 @@ services:
       retries: 5
 
   redis-init:
-      image: redis:latest
-      container_name: redis_initializer
-      depends_on:
-        redis:
-          condition: service_healthy
-      entrypoint: ["/bin/sh", "-c"]
-      networks:
-        - jobsnetworks
-      command: |
-        "echo 'Setting up default blacklist words'; 
-        redis-cli -h redis SET blacklist:young 'young'; 
-        redis-cli -h redis SET blacklist:recent_graduate 'recent graduate'; 
-        redis-cli -h redis SET blacklist:male 'male'; 
-        redis-cli -h redis SET blacklist:female 'female';
-        redis-cli -h redis SET blacklist:foreigner 'foreigner';
-        redis-cli -h redis SET blacklist:energetic 'energetic';
-        redis-cli -h redis SET blacklist:native_speaker_only 'native speaker only';
-        redis-cli -h redis SET blacklist:perfect_fit 'perfect fit';
-        redis-cli -h redis SET blacklist:youthful 'youthful';
-        redis-cli -h redis SET blacklist:christian 'Christian';
-        redis-cli -h redis SET blacklist:muslim 'Muslim';
-        redis-cli -h redis SET blacklist:attractive 'attractive';
-        redis-cli -h redis SET blacklist:single 'single';
-        redis-cli -h redis SET blacklist:married 'married';
-        redis-cli -h redis SET blacklist:healthy 'healthy';
-        redis-cli -h redis SET blacklist:manpower 'manpower';
-        redis-cli -h redis SET blacklist:clean_cut 'clean-cut';
-        redis-cli -h redis SET blacklist:strong 'strong';
-        redis-cli -h redis SET blacklist:must 'must';
-        redis-cli -h redis SET blacklist:dynamic 'dynamic';
-        redis-cli -h redis SET blacklist:problem_free 'problem-free';
-        redis-cli -h redis SET blacklist:no_children 'no children'"
-      
+    image: redis:latest
+    container_name: redis_initializer
+    depends_on:
+      redis:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    networks:
+      - jobsnetworks
+    command: |
+      "echo 'Setting up default blacklist words'; 
+      redis-cli -h redis SET blacklist:young 'young'; 
+      redis-cli -h redis SET blacklist:recent_graduate 'recent graduate'; 
+      redis-cli -h redis SET blacklist:male 'male'; 
+      redis-cli -h redis SET blacklist:female 'female';
+      redis-cli -h redis SET blacklist:foreigner 'foreigner';
+      redis-cli -h redis SET blacklist:energetic 'energetic';
+      redis-cli -h redis SET blacklist:native_speaker_only 'native speaker only';
+      redis-cli -h redis SET blacklist:perfect_fit 'perfect fit';
+      redis-cli -h redis SET blacklist:youthful 'youthful';
+      redis-cli -h redis SET blacklist:christian 'Christian';
+      redis-cli -h redis SET blacklist:muslim 'Muslim';
+      redis-cli -h redis SET blacklist:attractive 'attractive';
+      redis-cli -h redis SET blacklist:single 'single';
+      redis-cli -h redis SET blacklist:married 'married';
+      redis-cli -h redis SET blacklist:healthy 'healthy';
+      redis-cli -h redis SET blacklist:manpower 'manpower';
+      redis-cli -h redis SET blacklist:clean_cut 'clean-cut';
+      redis-cli -h redis SET blacklist:strong 'strong';
+      redis-cli -h redis SET blacklist:must 'must';
+      redis-cli -h redis SET blacklist:dynamic 'dynamic';
+      redis-cli -h redis SET blacklist:problem_free 'problem-free';
+      redis-cli -h redis SET blacklist:no_children 'no children'"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    networks:
+      - jobsnetworks
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.8.0
+    container_name: logstash
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - "5001:5000"
+    networks:
+      - jobsnetworks
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.8.0
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - jobsnetworks
+    depends_on:
+      - elasticsearch
+
+  apm:
+    image: docker.elastic.co/apm/apm-server:8.8.0
+    container_name: apm
+    environment:
+      - output.elasticsearch.hosts=["http://elasticsearch:9200"]
+    ports:
+      - "8200:8200"
+    networks:
+      - jobsnetworks
+    depends_on:
+      - kibana
+      - elasticsearch
+
+
 volumes:
   postgres-data:
-    
+
 networks:
-    jobsnetworks:
-        driver: bridge
+  jobsnetworks:
+    driver: bridge

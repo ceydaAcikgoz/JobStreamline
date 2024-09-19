@@ -110,11 +110,11 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Conn
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddDbContext<JobStreamlineDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddSingleton<IElasticsearchService, ElasticsearchService>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddSingleton<IRedisService, RedisService>();
 builder.Services.AddSingleton<IBlackwordService, BlackwordService>();
-
 
 builder.Services.AddHangfire(x =>
  x.UsePostgreSqlStorage(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -128,6 +128,12 @@ using (var context = new JobStreamlineDbContext(builder.Configuration))
 }
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var jobService = scope.ServiceProvider.GetRequiredService<IJobService>();
+    await jobService.CreateIndex();
+}
 
 if (app.Environment.IsDevelopment())
 {

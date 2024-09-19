@@ -14,10 +14,17 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="xunit" Version="2.9.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageReference Include="Moq" Version="4.20.72" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\JobStreamline.Entity\JobStreamline.Entity.csproj" />
+    <ProjectReference Include="..\..\Service\JobStreamline.Service\JobStreamline.Service.csproj" />
+    <ProjectReference Include="..\..\Api\JobStreamline.Api\JobStreamline.Api.csproj" />
   </ItemGroup>
 
 </Project>

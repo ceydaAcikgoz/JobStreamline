@@ -84,7 +84,7 @@ namespace JobStreamline.Api.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasDefaultValueSql("CURRENT_DATE");
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -97,7 +97,7 @@ namespace JobStreamline.Api.Migrations
                     b.Property<DateTime>("ExpiryDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
-                        .HasDefaultValueSql("DATEADD(day, 15, GETDATE())");
+                        .HasDefaultValueSql("CURRENT_DATE + INTERVAL '15 day'");
 
                     b.Property<string>("Location")
                         .IsRequired()

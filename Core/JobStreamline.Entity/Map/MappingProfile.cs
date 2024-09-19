@@ -6,8 +6,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Company, InputCompanyDto>()
-            .ForMember(dest => dest.CompanySize, opt => opt.MapFrom(src => src.CompanySize));
+        CreateMap<Company, InputCompanyDto>();
 
         CreateMap<InputCompanyDto, Company>();
 
@@ -27,5 +26,19 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.WorkType, opt => opt.MapFrom(src => src.WorkType));
 
         CreateMap<OutputJobDto, Job>();
+
+        CreateMap<Job, JobElasticDTO>()
+            .ForMember(dest => dest.Salary, opt => opt.MapFrom(src => src.Salary))
+            .ForMember(dest => dest.WorkType, opt => opt.MapFrom(src => src.WorkType))
+            .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Currency));
+
+        CreateMap<JobElasticDTO, Job>();
+
+        CreateMap<JobElasticDTO, Job>()
+            .ForMember(dest => dest.Salary, opt => opt.MapFrom(src => src.Salary))
+            .ForMember(dest => dest.WorkType, opt => opt.MapFrom(src => src.WorkType))
+            .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Currency));
+
+        CreateMap<Job, JobElasticDTO>();
     }
 }

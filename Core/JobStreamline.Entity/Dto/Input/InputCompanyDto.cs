@@ -22,7 +22,7 @@ public class InputCompanyDto
     [MaxLength(50, ErrorMessage = "ContactEmail cannot exceed 50 characters.")]
     public string ContactEmail { get; set; }
 
-    [Required(ErrorMessage = "CompanySize is required.")]
-    public CompanySize CompanySize { get; set; }
+    [Required(ErrorMessage = "NumberOfEmployees is required.")]
+    public int NumberOfEmployees { get; set; } 
 
 }

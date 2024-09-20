@@ -126,14 +126,19 @@ public class JobService : Service<Job>, IJobService
 
         foreach (var id in ids)
         {
-            bulkRequest.Delete(d => d.Id(id));
+            bulkRequest.Delete(d => d.Index(_indexName).Id(id));
         }
 
         var response = await client.BulkAsync(bulkRequest);
 
-        if (response.Errors)
+        if (!response.IsValidResponse)
         {
             Console.WriteLine("Some documents failed to delete.");
+            // Daha fazla hata detayı için
+            foreach (var itemWithError in response.ItemsWithErrors)
+            {
+                Console.WriteLine($"Failed to delete document {itemWithError.Id}: {itemWithError.Error.Reason}");
+            }
         }
         else
         {
@@ -155,7 +160,7 @@ public class JobService : Service<Job>, IJobService
                         .Fields("description")
                         .Type(TextQueryType.BestFields) // ankara-akkara aramasında score göre ikisini de getir ancak score olarak doğru aramayı en önce getirir. json'ın
                         .Fuzziness(new Fuzziness(1)) // yanlış yazımlar için 1 hak veriyor. ankara-akkara gibi
-                        .MinimumShouldMatch("75%") // aranan value'nun en az %75'inin eşleşmesi lazım.
+                        .MinimumShouldMatch("50%") // aranan value'nun en az %50'inin eşleşmesi lazım.
                     )
                 )
                 .BoostMode(FunctionBoostMode.Multiply)

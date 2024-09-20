@@ -1,0 +1,47 @@
+
+{
+    "dotnet-test-explorer.testProjectPath": "**/*Test.@(csproj|vbproj|fsproj)",
+    "dotnet.defaultSolution": "JobsStreamline.sln",
+    "workbench.colorCustomizations": {
+        // Totally Transparent
+        "editor.selectionHighlightBackground": "#ffffff00",
+        "editor.findMatchHighlightBackground": "#ffffff00",
+        // Borders
+        "editor.findMatchBorder": "#ffff00",
+        "editor.findMatchHighlightBorder": "#ff0000",
+        "editor.selectionHighlightBorder": "#ffffff",
+        "editor.lineHighlightBorder": "#272727",
+        // Selection
+        "editor.selectionBackground": "#771835",
+        "editor.wordHighlightBackground": "#771835",
+        // Misc
+        "editorCursor.foreground": "#00ff00",
+        "editor.lineHighlightBackground": "#181818",
+        "editor.findMatchBackground": "#000000",
+        // Debugger
+        "statusBar.debuggingBackground": "#410d18",
+        "statusBar.debuggingForeground": "#dddddd"
+    },
+    "editor.tokenColorCustomizations": {
+        "strings": "#d86464",
+        "keywords": "#ff00ea",
+        "comments": "#ddf129",
+        "variables": "#bad6de",
+        "functions": "#00fff2",
+        "numbers": "#ae19f3",
+        "textMateRules": [
+            {
+                "scope": "entity.name.type.interface.cs",
+                "settings": {
+                    "foreground": "#d86464"
+                }
+            },
+            {
+                "scope": "storage.type.interface.cs",
+                "settings": {
+                    "foreground": "#d86464",
+                }
+            }
+        ]
+    },
+}

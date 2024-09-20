@@ -34,13 +34,16 @@ public static class Jobs
             using (IJobService jobService = scope.ServiceProvider.GetRequiredService<IJobService>())
             {
                 var expiredJobs = jobService.GetAll(s => s.Status == JobStatus.Active && s.ExpiryDate < DateTime.Now).Include(w => w.Company).ToList();
-                expiredJobs?.ForEach(x =>
+                if (expiredJobs.Count > 0)
                 {
-                    x.Status = JobStatus.Closed;
-                    x.Company.JobPostingLimit++;
-                });
-                jobService.Update(expiredJobs);
-                jobService.BulkDeleteDocumentsAsync(expiredJobs.Select(s=>s.Id.ToString()).ToList());//ilgili kayıtları elastic'den siler.
+                    expiredJobs?.ForEach(x =>
+                    {
+                        x.Status = JobStatus.Closed;
+                        x.Company.JobPostingLimit++;
+                    });
+                    jobService.Update(expiredJobs);
+                    jobService.BulkDeleteDocumentsAsync(expiredJobs.Select(s => s.Id.ToString()).ToList());//ilgili kayıtları elastic'den siler.
+                }
             }
         }
     }

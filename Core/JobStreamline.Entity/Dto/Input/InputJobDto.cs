@@ -37,10 +37,4 @@ public class InputJobDTO
 
     [MaxLength(500, ErrorMessage = "Qualifications cannot exceed 500 characters.")]
     public string Qualifications { get; set; }
-
-    public DateTime CreatedDate { get; set; }
-
-    [EnumDataType(typeof(JobStatus))]
-    [JsonConverter(typeof(StringEnumConverter))]
-    public JobStatus Status { get; set; }
 }

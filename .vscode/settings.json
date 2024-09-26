@@ -1,47 +1,46 @@
-
 {
     "dotnet-test-explorer.testProjectPath": "**/*Test.@(csproj|vbproj|fsproj)",
     "dotnet.defaultSolution": "JobsStreamline.sln",
     "workbench.colorCustomizations": {
-        // Totally Transparent
+        // Şeffaf vurgular
         "editor.selectionHighlightBackground": "#ffffff00",
         "editor.findMatchHighlightBackground": "#ffffff00",
-        // Borders
-        "editor.findMatchBorder": "#ffff00",
-        "editor.findMatchHighlightBorder": "#ff0000",
-        "editor.selectionHighlightBorder": "#ffffff",
-        "editor.lineHighlightBorder": "#272727",
-        // Selection
-        "editor.selectionBackground": "#771835",
-        "editor.wordHighlightBackground": "#771835",
-        // Misc
-        "editorCursor.foreground": "#00ff00",
-        "editor.lineHighlightBackground": "#181818",
-        "editor.findMatchBackground": "#000000",
-        // Debugger
-        "statusBar.debuggingBackground": "#410d18",
-        "statusBar.debuggingForeground": "#dddddd"
+        // Kenarlıklar
+        "editor.findMatchBorder": "#569CD6", // Açık mavi
+        "editor.findMatchHighlightBorder": "#DCDCAA", // Açık sarı
+        "editor.selectionHighlightBorder": "#A6E22E", // Açık yeşil
+        "editor.lineHighlightBorder": "#3E3E42", // Koyu gri
+        // Seçim renklendirmesi
+        "editor.selectionBackground": "#264F78", // Koyu mavi
+        "editor.wordHighlightBackground": "#264F78", // Koyu mavi
+        // Diğer ayarlar
+        "editorCursor.foreground": "#FFFFFF", // Beyaz
+        "editor.lineHighlightBackground": "#2D2D30", // Koyu gri
+        "editor.findMatchBackground": "#515C6A", // Orta gri
+        // Hata ayıklayıcı renklendirmesi
+        "statusBar.debuggingBackground": "#007ACC", // Visual Studio Mavisi
+        "statusBar.debuggingForeground": "#FFFFFF" // Beyaz
     },
     "editor.tokenColorCustomizations": {
-        "strings": "#d86464",
-        "keywords": "#ff00ea",
-        "comments": "#ddf129",
-        "variables": "#bad6de",
-        "functions": "#00fff2",
-        "numbers": "#ae19f3",
+        "strings": "#D69D85", // Açık turuncu (String)
+        "keywords": "#569CD6", // Açık mavi (Anahtar kelimeler)
+        "comments": "#6A9955", // Yeşil (Yorumlar)
+        "variables": "#9CDCFE", // Açık mavi (Değişkenler)
+        "functions": "#DCDCAA", // Açık sarı (Fonksiyonlar)
+        "numbers": "#B5CEA8", // Yeşilimsi (Sayılar)
         "textMateRules": [
             {
                 "scope": "entity.name.type.interface.cs",
                 "settings": {
-                    "foreground": "#d86464"
+                    "foreground": "#4EC9B0" // Açık yeşil (Interface isimleri)
                 }
             },
             {
                 "scope": "storage.type.interface.cs",
                 "settings": {
-                    "foreground": "#d86464",
+                    "foreground": "#4EC9B0" // Açık yeşil (Interface türü)
                 }
             }
         ]
-    },
+    }
 }

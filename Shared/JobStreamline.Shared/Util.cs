@@ -6,6 +6,7 @@ public static class Util
 {
     public static void CalculateScore(Job Job, List<string> Blackwords)
     {
+        Job.QualityScore = 0;
         if (!string.IsNullOrEmpty(Job.Salary))
         {
             Job.QualityScore++;

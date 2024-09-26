@@ -60,7 +60,7 @@ namespace JobStreamline.DataAccess
 
         public void Update(T entity)
         {
-            _dbSet.Attach(entity);
+            _dbSet.AttachRange(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
             _dbContext.SaveChanges();
         }

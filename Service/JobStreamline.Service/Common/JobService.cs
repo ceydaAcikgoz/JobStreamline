@@ -45,13 +45,18 @@ public class JobService : Service<Job>, IJobService
         }
     }
 
-    public async Task<OutputJobDto> Update(InputJobDTO InputJobDTO)
+    public async Task<OutputJobDto> Update(Guid Id, InputJobDTO InputJobDTO)
     {
-        Job job = this._iMapper.Map<Job>(InputJobDTO);
+        Job job = this.Get(Id);
+        if (job == null)
+        {
+            throw new ArgumentNullException("İlan bulunamadı.");
+        }
+        job = this._iMapper.Map<Job>(InputJobDTO);
         this.Update(job);
-        await this.UpdateDocumentAsync(job.Id.ToString(), this._iMapper.Map<JobElasticDTO>(job));
-        OutputJobDto oDto = this._iMapper.Map<OutputJobDto>(job);
-        return oDto;
+        await this.UpdateDocumentAsync(Id, this._iMapper.Map<JobElasticDTO>(job));
+        OutputJobDto outputJobDto = this._iMapper.Map<OutputJobDto>(job);
+        return outputJobDto;
     }
 
     OutputJobDto? IJobService.Get(Guid Id)
@@ -90,7 +95,7 @@ public class JobService : Service<Job>, IJobService
         }
     }
 
-    private async Task UpdateDocumentAsync(string id, JobElasticDTO document)
+    private async Task UpdateDocumentAsync(Guid id, JobElasticDTO document)
     {
         var client = _elasticsearchService.Client;
         var response = await client.UpdateAsync<JobElasticDTO, JobElasticDTO>(id, u => u.Index(_indexName).Doc(document));

@@ -7,5 +7,5 @@ public interface ICompanyService:IService<Company>
 {
     OutputCompanyDto? Get(Guid Id);
     OutputCompanyDto Create(InputCompanyDto InputCompanyDto);
-    OutputCompanyDto Update(InputCompanyDto InputCompanyDto);
+    OutputCompanyDto Update(Guid Id,InputCompanyDto InputCompanyDto);
 }

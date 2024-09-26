@@ -64,9 +64,7 @@ public static class TestUtil
                         Salary = 70000 + i * 1000,
                         Currency = Currency.USD,
                         Location = $"Location {i}-1",
-                        Qualifications = "Bachelor's degree in Computer Science",
-                        CreatedDate = DateTime.UtcNow,
-                        Status = JobStatus.Active
+                        Qualifications = "Bachelor's degree in Computer Science"
                     },
                     new InputJobDTO
                     {
@@ -78,9 +76,7 @@ public static class TestUtil
                         Salary = 80000 + i * 1000,
                         Currency = Currency.USD,
                         Location = $"Location {i}-2",
-                        Qualifications = "MBA or related field",
-                        CreatedDate = DateTime.UtcNow,
-                        Status = JobStatus.Active
+                        Qualifications = "MBA or related field"
                     }
                 }
             };

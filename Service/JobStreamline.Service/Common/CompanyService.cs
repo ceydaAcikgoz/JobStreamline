@@ -20,9 +20,14 @@ public class CompanyService : Service<Company>, ICompanyService
         return this._iMapper.Map<OutputCompanyDto>(company);
     }
 
-    public OutputCompanyDto Update(InputCompanyDto InputCompanyDto)
+    public OutputCompanyDto Update(Guid Id, InputCompanyDto InputCompanyDto)
     {
-        Company company = this._iMapper.Map<Company>(InputCompanyDto);
+        Company company = this.Get(Id);
+        if (company == null)
+        {
+            throw new ArgumentNullException("İşveren bulunamadı.");
+        }
+        this._iMapper.Map(InputCompanyDto, company);
         this.Update(company);
         return this._iMapper.Map<OutputCompanyDto>(company);
     }

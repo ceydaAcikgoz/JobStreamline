@@ -30,10 +30,15 @@ namespace JobStreamline.Api.Controllers
             return Ok(outputCompanyDto);
         }
 
-        [HttpPut]
-        public IActionResult Update([FromBody] InputCompanyDto Company)
+        [HttpPut("{id}")]
+        public IActionResult Update(Guid id, [FromBody] InputCompanyDto Company)
         {
-            OutputCompanyDto outputCompanyDto = _iCompanyService.Update(Company);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); // Geçersiz veri durumunda 400 BadRequest döner
+            }
+
+            OutputCompanyDto outputCompanyDto = _iCompanyService.Update(id, Company);
             return Ok(outputCompanyDto);
         }
 

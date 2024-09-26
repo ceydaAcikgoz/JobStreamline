@@ -36,12 +36,19 @@ namespace JobStreamline.Api.Controllers
             return Ok(outputJobDto);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] InputJobDTO Job)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] InputJobDTO Job)
         {
-            OutputJobDto outputJobDto = await _iJobService.Update(Job);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); // Geçersiz veri durumunda 400 BadRequest döner
+            }
+
+            OutputJobDto outputJobDto = await _iJobService.Update(id, Job);
             return Ok(outputJobDto);
         }
+
+
 
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)

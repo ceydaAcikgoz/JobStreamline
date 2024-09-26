@@ -7,6 +7,7 @@ using JobStreamline.Entity;
 using Microsoft.Extensions.Configuration;
 using Elastic.Clients.Elasticsearch.QueryDsl;
 using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.Snapshot;
 
 namespace JobStreamline.Service;
 
@@ -52,7 +53,12 @@ public class JobService : Service<Job>, IJobService
         {
             throw new ArgumentNullException("İlan bulunamadı.");
         }
-        job = this._iMapper.Map<Job>(InputJobDTO);
+        else if (job.Status == Entity.Enum.JobStatus.Closed)
+        {
+            throw new ArgumentNullException("İlgili Job güncellenemez.");
+        }
+        this._iMapper.Map(InputJobDTO, job);
+        Util.CalculateScore(job, _iBlackWordService.AllBlackword().Result.Select(x => x.Value).ToList());
         this.Update(job);
         await this.UpdateDocumentAsync(Id, this._iMapper.Map<JobElasticDTO>(job));
         OutputJobDto outputJobDto = this._iMapper.Map<OutputJobDto>(job);
